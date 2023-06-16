@@ -17,13 +17,22 @@ type Context interface {
 - `context.Background()`
 - `context.TODO()`
 
-Каждый является ненулевым пустым контекстом.
+Каждый является композицией из пустого контекста.
 
 ```go
-var (
-	background = new(emptyCtx)
-	todo       = new(emptyCtx)
-)
+type backgroundCtx struct{ emptyCtx }
+
+type todoCtx struct{ emptyCtx }
+
+...
+
+func Background() Context {
+	return backgroundCtx{}
+}
+
+func TODO() Context {
+	return todoCtx{}
+}
 ```
 
 Корневой контекст никогда не отменяется, не имеет дэдлайна и не содержит значений.
