@@ -165,4 +165,9 @@ ctxValue := ctx.Value(key)
 
 #### Реализации контекста
 
+В пакете имеется 6 типов реализующих интерфейс Context: emptyCtx, cancelCtx, timerCtx, valueCtx, backgroundCtx и todoCtx. Каждый тип ассоциирован с функциями, создающими контекст.
+
+Тип emptyCtx встроен в типы backgroundCtx и todoCtx.
+Тип cancelCtx встроен в тип timerCtx.
+
 ![image](https://github.com/mcei/doc/assets/57292616/f7fa0c0a-45b8-40cd-8805-4ef2936940b2)
