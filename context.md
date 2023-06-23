@@ -151,7 +151,7 @@ ctxValue := ctx.Value(key)
 
 При явной передаче контекста в функции пользователи могут в полной мере воспользоваться его расширяемостью, устанавливать для каждого вызова крайние сроки, отмену и данные.
 
-### Use context Values only for request-scoped data that transits processes and APIs, not for passing optional parameters to functions
+#### Use context Values only for request-scoped data that transits processes and APIs, not for passing optional parameters to functions
 
 Одно из преимуществ использования контекста — это возможность передачи данных на протяжении обработки задачи через несколько промежуточных слоев.
 
