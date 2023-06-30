@@ -186,6 +186,7 @@ ctxValue := ctx.Value(key)
 Каждый тип ассоциирован с функциями, создающими контекст.
 
 Тип emptyCtx встроен в типы backgroundCtx и todoCtx.
+
 Тип cancelCtx встроен в тип timerCtx.
 
 ![image](https://github.com/mcei/doc/assets/57292616/f7fa0c0a-45b8-40cd-8805-4ef2936940b2)
