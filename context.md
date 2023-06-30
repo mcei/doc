@@ -171,3 +171,15 @@ ctxValue := ctx.Value(key)
 Тип cancelCtx встроен в тип timerCtx.
 
 ![image](https://github.com/mcei/doc/assets/57292616/f7fa0c0a-45b8-40cd-8805-4ef2936940b2)
+
+#### Embedding
+
+Go предлагает механизм встраивания (embedding) в качестве альтернативы традиционному механизму наследования.
+
+Разберем пример эмбеддинга из библиотеки Context.
+
+`type backgroundCtx struct{ emptyCtx }`
+
+Тип emptyCtx встроен в тип backgroundCtx и является для него основой.
+
+У emptyCtx [реализованы]([url](https://github.com/golang/go/blob/master/src/context/context.go#L179-L193)) методы Deadline(), Done(), Err(), Value(), а backgroundCtx реализует лишь свой методы String. При этом, эмбеддинг emptyCtx делает все его методы доступными для backgroundCtx.
