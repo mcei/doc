@@ -202,7 +202,7 @@ Go предлагает механизм встраивания (embedding) в �
 
 Тип emptyCtx встроен в тип backgroundCtx и является для него основой.
 
-У emptyCtx [реализованы]([url](https://github.com/golang/go/blob/master/src/context/context.go#L179-L193)) методы Deadline(), Done(), Err(), Value(), а backgroundCtx реализует лишь свой методы String. При этом, эмбеддинг emptyCtx делает все его методы доступными для backgroundCtx.
+У emptyCtx [реализованы]([url](https://github.com/golang/go/blob/master/src/context/context.go#L179-L193)) методы Deadline(), Done(), Err(), Value(), а backgroundCtx реализует лишь свой метод String. При этом, эмбеддинг emptyCtx делает все его методы доступными для backgroundCtx.
 
 
 #### context.AfterFunc
