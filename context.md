@@ -19,8 +19,8 @@ type Context interface {
 
 Контекст создается на верхнем уровне приложения и передается в функции и горутины, для того, чтобы завершать выполнение, когда потребуется.
 
-Есть ? два корневых (или родительских) контекста:
-- ? `context.Background()`
+Есть два корневых (или родительских) контекста:
+- `context.Background()`
 - `context.TODO()`
 
 Каждый является композицией из пустого контекста.
@@ -166,8 +166,6 @@ ctxValue := ctx.Value(key)
 
 #### Реализации контекста
 
-#### TODO add type stopCtx struct, type afterFuncCtx, type withoutCancelCtx
-
 #### TODO change picture
 
 
@@ -176,20 +174,20 @@ ctxValue := ctx.Value(key)
 - cancelCtx
 - timerCtx
 - valueCtx
--
--
-- 
+- stopCtx
+- afterFuncCtx
+- withoutCancelCtx
 - backgroundCtx
 - todoCtx
 
 
-Каждый тип ассоциирован с функциями, создающими контекст.
+Большинство типов ассоциированы с функциями, создающими контекст.
 
 Тип emptyCtx встроен в типы backgroundCtx и todoCtx.
 
-Тип cancelCtx встроен в тип timerCtx.
+Тип cancelCtx встроен в типы timerCtx и afterFuncCtx.
 
-![image](https://github.com/mcei/doc/assets/57292616/f7fa0c0a-45b8-40cd-8805-4ef2936940b2)
+![image](https://github.com/mcei/doc/assets/57292616/9a5fb7d6-b018-4bf3-9f45-2cc21a652889)
 
 
 #### Embedding
