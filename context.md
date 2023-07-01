@@ -138,6 +138,7 @@ ctxValue := ctx.Value(key)
 
 ### Новое в 1.21
 
+- TODO
 
 ### Идиомы использования context
 
