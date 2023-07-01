@@ -166,9 +166,6 @@ ctxValue := ctx.Value(key)
 
 #### Реализации контекста
 
-#### TODO change picture
-
-
 В пакете имеются следующие типы, реализующие интерфейс Context:
 - emptyCtx
 - cancelCtx
