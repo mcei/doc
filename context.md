@@ -165,6 +165,46 @@ type todoCtx struct{ emptyCtx }
 Это изменение сделано в рамках оптимизации по снижению использования CPU и памяти при инициализации пакета `context`.
 
 
+#### WithoutCancel
+
+Тип WithoutCancel реализует интерфейс Context
+
+WithoutCancel возвращает копию родительского контекста, которая не будет отменена при отмене родительского контекста. 
+
+Полученный контекст не возвращает Deadline или Err. Его Done канал является nil. Однако, полученный контекст сохраняет родительские значения.
+
+```go
+
+func WithoutCancel(parent Context) Context {
+	if parent == nil {
+		panic("cannot create context from nil parent")
+	}
+	return withoutCancelCtx{parent}
+}
+
+type withoutCancelCtx struct {
+	c Context
+}
+
+func (withoutCancelCtx) Deadline() (deadline time.Time, ok bool) {
+	return
+}
+
+func (withoutCancelCtx) Done() <-chan struct{} {
+	return nil
+}
+
+func (withoutCancelCtx) Err() error {
+	return nil
+}
+
+```
+
+Эта функциональность может найти применение в следующих довольно частых сценариях:
+  - при обработке rollback/cleanup операций в контексте какого-либо события (например, HTTP-запрос), которые должны продолжиться несмотря на отмену самого события
+  - при обработке длительных операций, запущенных каким-либо событием, которое завершается не дожидаясь завершения длительной операции.
+
+
 ### Идиомы использования context
 
 #### Do not store Contexts inside a struct type
