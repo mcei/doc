@@ -2,6 +2,11 @@
 
 Разобрать реализацию пакета context из стандартной библиотеки Go и осветить его изменения в версии 1.21
 
+### Содержание
+- [Что такое context](https://github.com/mcei/doc/blob/main/context.md#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-context)
+- [Новое в версии 1.21](https://github.com/mcei/doc/blob/main/context.md#%D0%BD%D0%BE%D0%B2%D0%BE%D0%B5-%D0%B2-121)
+- [Идиомы использования context](https://github.com/mcei/doc/blob/main/context.md#%D0%B8%D0%B4%D0%B8%D0%BE%D0%BC%D1%8B-%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-context)
+
 ### Что такое context
 
 Контекстом называют реализацию интерфейса `Context` из пакета `context`.
