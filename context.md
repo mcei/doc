@@ -374,8 +374,8 @@ type cancelCtx struct {
 func (c *cancelCtx) Done() <-chan struct{} {
 	d := c.done.Load() // Загружаем значение атомарной переменной
 	if d == nil { // Если значение не установлено, создаём новый канал и сохраняем его
-        d = make(chan struct{})
-        c.done.Store(d)
+        	d = make(chan struct{})
+        	c.done.Store(d)
 	}
 
 	return d.(chan struct{})
