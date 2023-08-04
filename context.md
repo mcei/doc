@@ -441,11 +441,6 @@ import "time"
 // В ней не предусмотрен механизм отмены.
 // Она не принимает Context или канал с событием отмены как аргумент.
 
-func executeTask() {
-	// выполняется целых десять секунд, пользователь уже ушёл
-	time.Sleep(10 * time.Second)
-}
-
 func main() {
 
 	// Задача:
@@ -455,6 +450,10 @@ func main() {
 	// Если executeTask была отменена по таймауту, нужно вернуть ошибку
 
 	executeTask()
+}
+
+func executeTask() {
+	time.Sleep(10 * time.Second)
 }
 ```
 ### Решение:
@@ -466,41 +465,6 @@ func executeTaskWithTimeout(ctx context.Context, timeout time.Duration) error {
 	// создать контекст с отменой по таймауту
 	// реализовать запуск executeTask
 	// реализовать возврат ошибки, если executeTask была отменена по таймауту
-}
-```
-
-Создаем контекст с отменой по таймауту
-
-```go
-timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
-defer cancel()
-```
-
-Запускаем функцию в горутине и по выполнении сообщаем в done канал
-
-```go
-// создаем буферизованный канал для контроля выполнения
-done := make(chan struct{}, 1)
-
-go func() {
-	executeTask()
-
-	// по выполнении executeTask записываем значение в канал
-	done <- struct{}{}
-
-	// и закрываем его
-	close(done)
-}()
-```
-
-Ожидаем выполнение executeTask или отмены контекста по таймауту
-
-```go
-select {
-case <-done:  // executeTask выполнилась
-	return nil
-case <-timeoutCtx.Done():  // произошла отмена контекста по таймауту
-	return timeoutCtx.Err()
 }
 ```
 
@@ -516,6 +480,67 @@ func main() {
 }
 ```
 
+Создаем контекст с отменой по таймауту
+
+```go
+func executeTaskWithTimeout(ctx context.Context, timeout time.Duration) error {
+	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	// реализовать запуск executeTask
+	// реализовать возврат ошибки, если executeTask была отменена по таймауту
+}
+```
+
+Запускаем функцию в горутине и по выполнении сообщаем в done канал
+
+```go
+func executeTaskWithTimeout(ctx context.Context, timeout time.Duration) error {
+	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	// создаем буферизированный канал
+	// если канал будет не буферизированным, то можем получить блокировку
+	done := make(chan struct{}, 1)
+
+	go func() {
+		executeTask()
+
+		// по выполнении executeTask записываем значение в канал
+		done <- struct{}{}
+
+		// и закрываем его
+		close(done)
+	}()
+}
+```
+
+Ожидаем выполнение executeTask или отмены контекста по таймауту
+
+```go
+func executeTaskWithTimeout(ctx context.Context, timeout time.Duration) error {
+	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	done := make(chan struct{}, 1)
+
+	go func() {
+		executeTask()
+		done <- struct{}{}
+		close(done)
+	}()
+
+	// ожидаем выполнение executeTask или отмены контекста по таймауту
+	select {
+	case <-done:  // executeTask выполнилась
+		return nil
+	case <-timeoutCtx.Done():  // произошла отмена контекста по таймауту
+		return timeoutCtx.Err()  // возвращаем ошибку
+	}
+}
+
+```
+
 Итоговое решение:
 
 ```go
@@ -527,8 +552,12 @@ import (
 	"time"
 )
 
-func executeTask() {
-	time.Sleep(10 * time.Second)
+func main() {
+	timeout := 5 * time.Second
+	err := executeTaskWithTimeout(context.Background(), timeout)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func executeTaskWithTimeout(ctx context.Context, timeout time.Duration) error {
@@ -551,12 +580,8 @@ func executeTaskWithTimeout(ctx context.Context, timeout time.Duration) error {
 	}
 }
 
-func main() {
-	timeout := 5 * time.Second
-	err := executeTaskWithTimeout(context.Background(), timeout)
-	if err != nil {
-		log.Fatal(err)
-	}
+func executeTask() {
+	time.Sleep(10 * time.Second)
 }
 ```
 
