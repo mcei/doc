@@ -512,9 +512,10 @@ func executeTaskWithTimeout(ctx context.Context, timeout time.Duration) error {
 	defer cancel()
 
 	// создаем буферизированный канал
-	// если канал будет не буферизированным, то done <- struct{}{} в горутине
-	// ниже заблокируется навсегда, если функция будет отменена по таймауту
 	done := make(chan struct{}, 1)
+	
+	// если канал не буферизированный и функция отменена по таймауту,
+	// то done <- struct{}{} в горутине заблокируется навсегда и горутина останется зависшей
 
 	go func() {
 		executeTask()
